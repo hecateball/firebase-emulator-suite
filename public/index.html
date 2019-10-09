@@ -23,7 +23,6 @@
         // Firestore エミュレータが起動している場合、エミュレータに接続する
         const firestore = await fetch('http://localhost:8080').catch(() => undefined)
         if (firestore && firestore.status === 200) {
-          //await firebase.firestore().clearPersistence()
           firebase.firestore().settings({host: 'localhost:8080', ssl: false})
         }
 
