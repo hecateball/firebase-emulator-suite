@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Firebase Local Emulator Suite</title>
+    <script defer src="/__/firebase/7.1.0/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.1.0/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+  </head>
+  <body>
+    <h1>Firebase Local Emulator Suite</h1>
+    <div>
+      <input type="text" id="message" placeholder="input message here" />
+      <button id="submit">投稿</button>
+    </div>
+
+    <h2>Messages</h2>
+    <ul id="messages"></ul>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Firestore エミュレータが起動している場合、エミュレータに接続する
+        const firestore = await fetch('http://localhost:8080').catch(() => undefined)
+        if (firestore && firestore.status === 200) {
+          //await firebase.firestore().clearPersistence()
+          firebase.firestore().settings({host: 'localhost:8080', ssl: false})
+        }
+
+        // messagesコレクションのデータをリアルタイム更新
+        firebase.firestore()
+          .collection('messages')
+          .orderBy('createdAt', 'desc')
+          .onSnapshot((snapshot) => {
+            const messages = document.getElementById('messages')
+            messages.parentNode.replaceChild(messages.cloneNode(false), messages)
+
+            snapshot.docs.forEach((doc) => {
+              const message = document.createElement('li')
+              message.innerText = doc.get('message')
+              document.getElementById('messages').appendChild(message)
+            })
+          })
+
+        // Firestoreへの書き込み
+        document.getElementById('submit').onclick = async () => {
+          const input = document.getElementById('message')
+          try {
+            await firebase.firestore()
+              .collection('messages')
+              .add({
+                message: input.value,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              })
+            input.value = ''
+          } catch(error) {
+            window.alert(error.message)
+          }
+        }
+      })
+
+
+    </script>
+  </body>
+</html>

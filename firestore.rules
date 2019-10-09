@@ -1,0 +1,19 @@
+service cloud.firestore {
+
+  // スキーマ確認
+  function isValidMessage(message) {
+    return message.size() == 2
+      && 'message' in message && message.message is string
+      && 'createdAt' in message && message.createdAt is timestamp;
+  }
+
+  match /databases/{database}/documents {
+    match /messages/{message} {
+      allow read;
+
+      //allow write: if isValidMessage(request.resource.data)
+      //  && request.resource.data.message.size() <= 100
+      //  && request.resource.data.createdAt == request.time;
+    }
+  }
+}
