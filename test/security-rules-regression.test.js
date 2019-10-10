@@ -5,13 +5,15 @@ const app = firebase.initializeTestApp({
   auth: null
 })
 
+const validInput = {
+  message: 'message',
+  createdAt: firebase.firestore.FieldValue.serverTimestamp()
+}
+
 test('成功', async () => {
   const result = await app.firestore()
     .collection('messages')
-    .add({
-      message: 'message',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    })
+    .add(validInput)
   expect(result).toBeInstanceOf(firebase.firestore.DocumentReference)
 })
 
@@ -20,8 +22,8 @@ test('失敗: メッセージが空文字列', async () => {
     await app.firestore()
       .collection('messages')
       .add({
+        ...validInput,
         message: '',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
   } catch (error) {
     expect(error.code).toEqual('permission-denied')
@@ -33,8 +35,8 @@ test('失敗: メッセージが長すぎる', async () => {
     await app.firestore()
       .collection('messages')
       .add({
+        ...validInput,
         message: '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
   } catch (error) {
     expect(error.code).toEqual('permission-denied')
@@ -46,7 +48,7 @@ test('失敗: 適当な時刻', async () => {
     await app.firestore()
       .collection('messages')
       .add({
-        message: 'message',
+        ...validInput,
         createdAt: firebase.firestore.Timestamp.now()
       })
   } catch (error) {

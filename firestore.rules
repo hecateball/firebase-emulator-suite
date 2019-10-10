@@ -12,10 +12,10 @@ service cloud.firestore {
       allow read;
 
       // ここから下をアンコメントすると書き込みができるようになります。
-      allow write: if isValidMessage(request.resource.data)
-        && request.resource.data.message.size() > 0
-        && request.resource.data.message.size() <= 100
-        && request.resource.data.createdAt == request.time;
+      //allow write: if isValidMessage(request.resource.data)
+      //  && request.resource.data.message.size() > 0
+      //  && request.resource.data.message.size() <= 100
+      //  && request.resource.data.createdAt == request.time;
     }
   }
 }
