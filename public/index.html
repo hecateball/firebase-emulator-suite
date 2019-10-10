@@ -4,29 +4,47 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Firebase Local Emulator Suite</title>
+    <link rel="stylesheet" href="/css/uikit.min.css" />
+    <script src="/js/uikit.min.js"></script>
     <script defer src="/__/firebase/7.1.0/firebase-app.js"></script>
     <script defer src="/__/firebase/7.1.0/firebase-firestore.js"></script>
     <script defer src="/__/firebase/init.js"></script>
   </head>
   <body>
-    <h1>Firebase Local Emulator Suite</h1>
-    <div>
-      <input type="text" id="message" placeholder="input message here" />
-      <button id="submit">投稿</button>
+    <div class="uk-navbar-container" uk-navbar>
+      <div class="uk-navbar-item uk-logo">Firebase Local Emulator Suite</div>
     </div>
-
-    <h2>Messages</h2>
-    <ul id="messages"></ul>
+    <div class="uk-container uk-container-expand">
+      <div class="uk-card uk-card-default uk-card-body uk-margin-top">
+        <h3 class="uk-card-title">入力フォーム</h3>
+        <div class="uk-flex">
+          <input id="message" type="text" class="uk-input uk-form-small uk-form-width-large" placeholder="メッセージを入力してください" />
+          <button id="submit" class="uk-button uk-button-default uk-button-small">投稿</button>
+        </div>
+      </div>
+      <div class="uk-card uk-card-default uk-margin-top">
+        <div class="uk-card-header">
+          <div class="uk-card-title">投稿されたメッセージ</div>
+        </div>
+        <div class="uk-card-body">
+          <ul id="messages" class="uk-list uk-list-divider"></ul>
+        </div>
+      </div>
+    </div>
 
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
-        // Firestore エミュレータが起動している場合、エミュレータに接続する
+        /**
+         * Firestore エミュレータが起動している場合、エミュレータに接続します.
+         */
         const firestore = await fetch('http://localhost:8080').catch(() => undefined)
         if (firestore && firestore.status === 200) {
           firebase.firestore().settings({host: 'localhost:8080', ssl: false})
         }
 
-        // messagesコレクションのデータをリアルタイム更新
+        /**
+         * messagesコレクションのデータをリアルタイム・リスナーで取得します.
+         */
         firebase.firestore()
           .collection('messages')
           .orderBy('createdAt', 'desc')
@@ -41,7 +59,9 @@
             })
           })
 
-        // Firestoreへの書き込み
+        /**
+         * Firestoreへの書き込みを行います.
+         */
         document.getElementById('submit').onclick = async () => {
           const input = document.getElementById('message')
           try {
@@ -57,8 +77,6 @@
           }
         }
       })
-
-
     </script>
   </body>
 </html>
