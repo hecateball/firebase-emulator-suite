@@ -1,6 +1,6 @@
 service cloud.firestore {
 
-  // スキーマ確認
+  // messageドキュメントのスキーマチェック
   function isValidMessage(message) {
     return message.size() == 2
       && 'message' in message && message.message is string
@@ -11,10 +11,11 @@ service cloud.firestore {
     match /messages/{message} {
       allow read;
 
-      //allow write: if isValidMessage(request.resource.data)
-      //  && request.resource.data.message.size() > 0
-      //  && request.resource.data.message.size() <= 100
-      //  && request.resource.data.createdAt == request.time;
+      // ここから下をアンコメントすると書き込みができるようになります。
+      allow write: if isValidMessage(request.resource.data)
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 100
+        && request.resource.data.createdAt == request.time;
     }
   }
 }
