@@ -2,15 +2,11 @@
   "name": "firebase-emulator-suite",
   "version": "1.0.0",
   "description": "Firebase Local Emulator Suiteのテストアプリケーションです。",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "test": "jest --detectOpenHandles"
+    "test": "jest"
   },
   "author": "hecateball",
   "license": "MIT",
-  "homepage": "https://github.com/hecateball/firebase-emulator-suite#readme",
   "devDependencies": {
     "@firebase/testing": "^0.13.4",
     "jest": "^24.9.0"
