@@ -11,7 +11,7 @@ service cloud.firestore {
     match /messages/{message} {
       allow read;
 
-      // ここから下をアンコメントすると書き込みができるようになります。
+      // ここから下をコメント解除すると書き込みができるようになります。
       //allow write: if isValidMessage(request.resource.data)
       //  && request.resource.data.message.size() > 0
       //  && request.resource.data.message.size() <= 100
