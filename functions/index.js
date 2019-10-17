@@ -8,10 +8,8 @@ admin.initializeApp()
  */
 exports.toUpperCase = functions.firestore
   .document('messages/{message}')
-  .onCreate((snapshot) => {
-    return admin.firestore()
-      .doc(snapshot.ref.path)
-      .update({
-        message: snapshot.get('message').toUpperCase()
-      })
+  .onCreate(async (snapshot) => {
+    return snapshot.ref.update({
+      message: snapshot.get('message').toUpperCase()
+    })
   })
